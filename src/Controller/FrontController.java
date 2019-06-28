@@ -18,6 +18,7 @@ import Command.BoardOneSelectCommand;
 import Command.BoardUpdateViewCommand;
 import Command.BoardUpdateOkCommand;
 import Command.Command;
+import Command.InsertCommantCommand;
 import Command.MemberInsertCommand;
 import Command.MemberLoginCommand;
 import Command.MemberMypageCommand;
@@ -58,16 +59,17 @@ public class FrontController extends HttpServlet {
 	protected void actionDo(HttpServletRequest request, HttpServletResponse response) //view단에서 넘어온 요청이 request에 담긴상태!
 			throws ServletException, IOException {
 		
-		request.setCharacterEncoding("EUC-KR");
-		response.setContentType("text/html; charset=EUC-KR");
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		
 		Command command = null;
 		
+		HttpSession session = request.getSession();
 		String uri = request.getRequestURI();
 		String conPath = request.getContextPath();
 		String cop = uri.substring(conPath.length());
 		
-		System.out.println(request.getParameter("id"));
+		
 		
 		System.out.println(uri);
 		System.out.println(conPath);
@@ -80,13 +82,11 @@ public class FrontController extends HttpServlet {
 			command = new MemberLoginCommand(); //회원 로그인과 관련된 커맨드를 실행.
 			command.run(request, response);
 			int num =(int)request.getAttribute("check");
+			System.out.println("아이디"+request.getAttribute("id"));
+			System.out.println("세션아이디"+session.getAttribute("sessionid"));
 			out.println(num);
 			out.close(); 
-				if(num==1) {
-					viewPage = "main.do";
-				}
-				viewPage = "Login.jsp";
-				return; // 출력객체를 쓰게 된다면 Redirect방식으로 쓰면 이전에 쓰던 요청은 쓸수 없게 되므로 forward단에서 에러가 나게됨
+			return; // 출력객체를 쓰게 된다면 Redirect방식으로 쓰면 이전에 쓰던 요청은 쓸수 없게 되므로 forward단에서 에러가 나게됨
 				//그렇기 때문에 리턴을 해줘서 로그인 단에만 Redirect방식으로 url을 요청하게 만들어야함.
 		} else if(cop.equals("/main.do")){
 			command = new BoardMainListCommand();
@@ -119,7 +119,6 @@ public class FrontController extends HttpServlet {
 			command.run(request, response);
 			viewPage = "signUpOk.jsp";
 		}else if(cop.equals("/logOut.do")) {
-			HttpSession session = request.getSession();
 			session.invalidate();
 			viewPage = "logout.jsp";
 		}else if(cop.equals("/boardinsert.do")) {
@@ -142,7 +141,14 @@ public class FrontController extends HttpServlet {
 			command = new BoardUpdateOkCommand();
 			command.run(request, response);
 			viewPage = "oneselect.do";
+		}else if(cop.equals("/insertcommant.do")) {
+			command = new InsertCommantCommand();
+			command.run(request, response);
+			return;
+			
 		}
+		
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
 		// 받아온 request값을 view단으로 보내는 작업을 해야함. forward를 쓴다면 최초로 요청받은 정보를

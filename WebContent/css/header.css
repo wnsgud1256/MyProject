@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+
+.line {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: gray;
+}
+
+.white-color {
+	color: white;
+}
+
+/*언더라인 동적인 움직임 구현*/
+.ap,.ap:visited {
+  text-decoration: none;
+  position: relative;
+  color: #ff0000;
+}
+
+.ap:after, .ap:visited:after {
+  content: '';
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  background: #000000;
+  transition: 0.2s;
+}
+.ap:hover:after, .ap:visited:hover:after {
+  width: 100%;
+}
+.ap.block, .ap:visited.block {
+  display: block;
+  padding: 0.5em;
+}
+.ap.block:hover, .ap:visited.block:hover {
+  background: #eee;
+}

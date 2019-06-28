@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -17,21 +17,21 @@ $(document).ready(function() {
  window.onload = pValue;
 </script>
 </head>
-<title>¾ÆÀÌµğÁßº¹Ã¼Å©</title>
+<title>ì•„ì´ë””ì¤‘ë³µì²´í¬</title>
 <body>
 	<div id="wrap">
-		<br> <b><font size="4" color="gray">¾ÆÀÌµğ Áßº¹ Ã¼Å©</font></b>
+		<br> <b><font size="4" color="gray">ì•„ì´ë”” ì¤‘ë³µ ì²´í¬</font></b>
 		<hr size="1" width="460">
 		<br>
 		<div id="chk">
 			<form id="checkForm">
 				<input type="text" name="idinput" id="userId"> <input
-					type="button" value="Áßº¹È®ÀÎ" onclick="idCheck()">
+					type="button" value="ì¤‘ë³µí™•ì¸" onclick="idCheck()">
 			</form>
 			<div id="msg"></div>
-			<br> <input id="cancelBtn" type="button" value="Ãë¼Ò"
+			<br> <input id="cancelBtn" type="button" value="ì·¨ì†Œ"
 				onClick="window.close()"> <br> <input id="userBtn"
-				type="button" value="»ç¿ëÇÏ±â" onClick="sendCheckValue()" style="visibility:hidden">
+				type="button" value="ì‚¬ìš©í•˜ê¸°" onClick="sendCheckValue()" style="visibility:hidden">
 		</div>
 	</div>
 	<script>
@@ -41,15 +41,15 @@ $(document).ready(function() {
 			console.log(id);
 			
 			if(!valueCut.test(id)) {
-				alert("¾ÆÀÌµğ´Â 4~12ÀÚÀÇ ¿µ¹® ´ë¼Ò¹®ÀÚ¿Í ¼ıÀÚ·Î¸¸ ÀÔ·Â ÇØÁÖ¼¼¿ä.");
+				alert("ì•„ì´ë””ëŠ” 4~12ìì˜ ì˜ë¬¸ ëŒ€ì†Œë¬¸ìì™€ ìˆ«ìë¡œë§Œ ì…ë ¥ í•´ì£¼ì„¸ìš”.");
 				return false;
 			} else {
 				
 				httpRequest = new XMLHttpRequest();
-				let param = "id=" + id; //id¸¦ ÇÏ°í µÚ¿¡ =À» ºÙ¿©¾ß id°ªÀÌ Á¦´ë·Î ÀÔ·ÂÀÌ µÇ´Â»óÅÂ°¡µÊ.
+				let param = "id=" + id; //idë¥¼ í•˜ê³  ë’¤ì— =ì„ ë¶™ì—¬ì•¼ idê°’ì´ ì œëŒ€ë¡œ ì…ë ¥ì´ ë˜ëŠ”ìƒíƒœê°€ë¨.
 				httpRequest.onreadystatechange = callback;
 				httpRequest.open("POST", "SignIdCheck.do", true);
-				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=EUC-KR');
+				httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				httpRequest.send(param);
 			}
 		}
@@ -59,11 +59,11 @@ $(document).ready(function() {
 				let resultText = httpRequest.responseText;
 				if(resultText == 1){
 					document.getElementById("userBtn").style.visibility='hidden';
-					document.getElementById("msg").innerHTML ="Áßº¹µÈ ¾ÆÀÌµğ ÀÔ´Ï´Ù ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä";			}
+					document.getElementById("msg").innerHTML ="ì¤‘ë³µëœ ì•„ì´ë”” ì…ë‹ˆë‹¤ ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš”";			}
 				else if(resultText == 0){
 					document.getElementById("cancelBtn").style.visibility='visible';
 					document.getElementById("userBtn").style.visibility='visible';
-					document.getElementById("msg").innerHTML ="»ç¿ë °¡´ÉÇÑ ¾ÆÀÌµğ ÀÔ´Ï´Ù.";
+					document.getElementById("msg").innerHTML ="ì‚¬ìš© ê°€ëŠ¥í•œ ì•„ì´ë”” ì…ë‹ˆë‹¤.";
 				}
 			}
 		}

@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+
+#footer-basic {
+
+    background: linear-gradient(-135deg, #2E2E2E, #0B0B61);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    font: bold 16px sans-serif;
+    padding: 40px 50px 10px 30px;
+    margin-top: 80px;
+    position:relative;
+	bottom:0;
+}
+.white-color {
+	color: white;
+}
+
+
+

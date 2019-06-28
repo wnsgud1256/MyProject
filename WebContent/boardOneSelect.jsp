@@ -1,56 +1,203 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<style>
+html,body {height: 100%;}
+</style>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/header.css">
+<link rel="stylesheet" type="text/css" href="css/footer.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+	integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
 <title>Insert title here</title>
+<script>
+//TypeError : $ .ajax is not a function ì—ëŸ¬ê°€ ê³„ì† ë–³ë˜ ì´ìœ . jquery3.4.1.slim.min.js ì œì´ì¿¼ë¦¬ cdnì¤‘ì—ì„œ ajax ëª¨ë“ˆì„ ìƒëµí•œ slime ê²½ëŸ‰ íŒì´ ì € ì½”ë“œë‹¤ slim ì½”ë“œ ë•Œë¬¸ì—
+//ì‘ë™ì´ ë˜ì§€ ì•Šì•˜ë˜ê²ƒ. slimì„ ì œê±° í›„ ê²½ëŸ‰íŒì´ ì•„ë‹Œ cdnì„ ì“°ë‹ˆ ì‘ë™ì„ í–‡ìŒ.
+	$(document).ready(function() {
+		$("#CommantBtn").click(function(){
+			let content = $("#commantText").val();
+			let session = $("#sessionVal").val();
+			let number = $("#boardNum").val();
+			let lo = window.location;
+			console.log(content);
+			console.log(session);
+			console.log(number);
+			console.log(lo);
+			
+			$.ajax({
+				type:"POST",
+				url:"insertcommant.do",
+				data:{ "Content" : content,
+					    "Writer" : session,
+					    "Number" : number
+					 },
+				success:function(res){
+					location.reload();
+				},
+				error:function(){
+					alert("ì—ëŸ¬ì…ë‹ˆë‹¤.");
+				}
+				
+			});
+		});
+		
+			function commantDel(){
+				let CoNum = $("commantNum").val();
+				$.ajax({
+					type:"POST",
+					url:"deletecommant.do",
+					data:{ "CommantNum" : CoNum},
+					success:function(res){
+						location.reload();
+					},
+					error:function(){
+						alert("ì—ëŸ¬ë–³ìŠµë‹ˆë‹¤.");
+					}
+				});
+			};
+			
+			function commantUpdate(){
+				$.ajax({
+					type:"POST",
+					url:"updatecommant.do",
+					data:{"Content" : content
+						  "Number"},
+					success:function(){
+						location.reload();
+					},
+					error:function(){
+						alert("ì—ëŸ¬ëœ¸.");
+					}
+				});
+			};
+			function reCommant(){
+				$.ajax({
+					type:"POST",
+					url:"recommant.do",
+					data:{"Content" : content,
+						  "Writer" : writer,
+						  "Number" :number,
+						  },
+					success:function(){
+						location.reload();
+					},
+					error:function(){
+						alert("ì—ëŸ¬ëœ¸");
+					}
+				});
+			};
+			function boardAction(value) {
+				if(value == 0) 
+					location.href="boardUpdate.do?number=${oneBoard.boardNumber}";
+				else if(value == 1) {
+				let delCheck = confirm("í•´ë‹¹ ê¸€ì„ ì •ë§ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
+					if(delCheck) {
+						alert("ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
+						location.href="boardDelete.do?number=${oneBoard.boardNumber}&page=1";
+					} else {
+						alert("ì‚­ì œê°€ ì·¨ì†Œ ë˜ì—ˆìŠµë‹ˆë‹¤.")
+					}
+				
+				}
+			};
+			
+		let changeStyle = $("#footer-basic"); //í‘¸í„° css ë³€ê²½ë²•
+		changeStyle.css('position', 'relative');
+	});
+</script>
 </head>
 <body>
-	<table border="1">
+<jsp:include page="header.jsp"/>
+<div class="container" style="margin:100px auto auto auto;">
+<div class="row justify-content-md-center" style="margin-bottom:150px;">
+<form>
+	<table class="table table-sm">
 		<tr>
-			<th>ÀÛ¼ºÀÚ</th>
+			<th>ì‘ì„±ì</th>
 			<td>${oneBoard.boardWriter}</td>
-			<th>Á¶È¸¼ö</th>
+		</tr>
+		<tr>
+			<th>ì¡°íšŒìˆ˜</th>
 			<td>${oneBoard.boardCount}</td>
 		</tr>
 		<tr>
-			<th>Á¦¸ñ</th>
+			<th>ì œëª©</th>
 			<td>${oneBoard.boardTitle}</td>
 		</tr>
 		<tr>
-			<th>ÀÛ¼ºÀÏÀÚ</th>
+			<th>ì‘ì„±ì¼ì</th>
 			<td>${oneBoard.boardDate}</td>
-			<th>ÃÖ±Ù ¼öÁ¤µÈ ³¯Â¥</th>
-			<td><c:if test="${oneBoard.boardLmd == null}">¾øÀ½</c:if>${oneBoard.boardLmd}</td>
 		</tr>
 		<tr>
-			<th>³»¿ë</th>
-			<td>${oneBoard.boardContent}</td>
+			<th>ìµœê·¼ ìˆ˜ì •ëœ ë‚ ì§œ</th>
+			<td><c:if test="${oneBoard.boardLmd == null}">ì—†ìŒ</c:if>${oneBoard.boardLmd}</td>
+		</tr>
+		<tr>
+			<th>ë‚´ìš©</th>
+			<td><textarea name="content" cols="100" rows="10" placeholder="ë‚´ìš©ì„ ì…ë ¥í•˜ì„¸ìš”" autocomplete="off" id="content" style="border:0;" readonly>${oneBoard.boardContent}</textarea></td>
 		</tr>
 	</table>
-	<button onclick="location.href='main.do'">¸ñ·ÏÀ¸·Î</button>
-	<c:if test="${sessionid !=null}">
-	<input type="button" value="±Û ¼öÁ¤" onclick="boardAction(0)">
-	<input type="button" value="±Û »èÁ¦" onclick="boardAction(1)">
-	</c:if>
 	
-	<script>
-		function boardAction(value) {
-			if(value == 0) 
-				location.href="boardUpdate.do?number=${oneBoard.boardNumber}";
-			else if(value == 1) {
-			let delCheck = confirm("ÇØ´ç ±ÛÀ» Á¤¸» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?");
-				if(delCheck) {
-					alert("»èÁ¦µÇ¾ú½À´Ï´Ù.");
-					location.href="boardDelete.do?number=${oneBoard.boardNumber}";
-				} else {
-					alert("»èÁ¦°¡ Ãë¼Ò µÇ¾ú½À´Ï´Ù.")
-				}
-			
-			}
-		}
-	</script>
+	<input type="button"class="btn btn-primary" onclick="location.href='main.do?page=1'" value="ëª©ë¡ìœ¼ë¡œ">
+	<c:if test="${sessionid !=null && sessionid == oneBoard.boardWriter}">
+	<input type="button" class="btn btn-success"value="ê¸€ ìˆ˜ì •" onclick="boardAction(0)" style="right:0; bottom:0; position:relative;">
+	<input type="button" class="btn btn-danger" value="ê¸€ ì‚­ì œ" onclick="boardAction(1)">
+	</c:if>
+</form>
+</div>
+<!-- ëŒ“ê¸€ ì“°ëŠ”ê³³ -->
+<div class="row justify-content-md-center">
+	<c:if test="${sessionid != null}">
+	<textarea rows="5" cols="130" id="commantText"></textarea>
+	<input type="button" class="btn btn-dark" value="ëŒ“ê¸€ ì“°ê¸°" id="CommantBtn">
+	</c:if>
+</div>
+<!-- ëŒ“ê¸€ì„ ë³´ì—¬ì£¼ëŠ” ë¶€ë¶„. -->
+<div class="row justify-content-md-center" id="commantBox">
+	<table class="table table-sm">
+		<c:forEach items="${onecommantlist}" var="commant">
+			<tr style="margin-left:${20*commant.commantRedepth}">
+				<c:choose>
+				<c:when test="${commant.commantReid == null}">
+				<td>${commant.commantWriter}</td>
+				</c:when>
+				<c:otherwise>
+				<td class="">${commant.commantReid}${commant.commantWriter}</td>
+				</c:otherwise>
+				</c:choose>
+				<td class="CommantCon">${commant.commantContent}</td>
+				<td>${commant.commantDate}</td>
+				<td>
+				<button onclick="commantDel();"></button>/<a onclick="commantUpdate">ìˆ˜ì •</a>/<a onclick="reCommant">ëŒ“ê¸€</a>
+				</td>
+			</tr>
+		</c:forEach>
+	</table>
+</div>
+</div>
+<input type="hidden" value="${sessionid}" id="sessionVal">
+<input type="hidden" value="${param.number}" id="boardNum">
+<input type="hidden" value="${commant.commantNumber}" id="commantNum">
+	
+	<jsp:include page="bootstrap4.jsp" />
+	<jsp:include page="footer.jsp"/>
+	
 </body>
 </html>

@@ -1,30 +1,79 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<style>
+html,body {height: 100%;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/header.css">
+<link rel="stylesheet" type="text/css" href="css/footer.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+	integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
 <title>Insert title here</title>
+<script>
+	$(document).ready(function() {
+		let changeStyle = $("#footer-basic"); //í‘¸í„° css ë³€ê²½ë²•
+		changeStyle.css('position', 'absolute');
+	});
+	
+</script>
 </head>
 <body>
+<jsp:include page="header.jsp"/>
+<div class="container" style="margin:100px auto auto auto;">
+<div class="row justify-content-md-center">
 <form action="boardinsert.do" method="Post">
-	<table border="1">
+	<table class="table table-sm">
 		<tr>
-			<th>ÀÛ¼ºÀÚ</th>
-			<td><input type="text" name="writer" value="${sessionid}" readonly></td>
+			<th>ì‘ì„±ì</th>
+			<td>${sessionid}</td>
 		</tr>
 		<tr>
-			<th>Á¦¸ñ</th>
-			<td><input type="text" name="title" placeholder="Á¦¸ñÀ» ÀÔ·ÂÇÏ¼¼¿ä"></td>
+			<th>ì œëª©</th>
+			<td><input type="text" name="title" size="50" maxlength="100" placeholder="ì œëª©ì„ ì…ë ¥í•˜ì„¸ìš”" autocomplete="off" id="title" style="border:none; background-color:#D8D8D8;"></td>
 		</tr>
 		<tr>
-			<th>³»¿ë</th>
-			<td><textarea name="content" placeholder="³»¿ëÀ» ÀÔ·ÂÇÏ¼¼¿ä"></textarea></td>
+			<th>ë‚´ìš©</th>
+			<td><textarea name="content" cols="100" rows="10" placeholder="ë‚´ìš©ì„ ì…ë ¥í•˜ì„¸ìš”" autocomplete="off" id="content" style="border:none;"></textarea></td>
 		</tr>
 	</table>
-	<input type="submit" value="±Û ¿Ã¸®±â">
-	<input type="reset" value="Ãë¼Ò" onclick="history.go(-1)">
+	<button class="btn btn-success"id="form1">ê¸€ ì˜¬ë¦¬ê¸°</button>
+	<input type="reset" class="btn btn-danger" onclick="location.href='main.do?page=1'" value="ì·¨ì†Œ"> 
+	<input type="hidden" value="1" name="page">
 </form>
+</div>
+</div>
+<script>
+$("#form1").on("click", function() {
+	let title = $("#title").val();
+	let content = $("#content").val();
+	
+	if(title==""){
+		alert("ì œëª©ì„ ì¨ì£¼ì„¸ìš”");
+		return false;
+	} else if(content==""){
+		alert("ë‚´ìš©ì„ ì¨ì£¼ì„¸ìš”");
+		return false;
+	}
+	document.getElementById("form1").submit();
+})
+</script>
+
+<jsp:include page="bootstrap4.jsp" />
+
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

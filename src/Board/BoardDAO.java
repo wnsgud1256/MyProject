@@ -82,7 +82,7 @@ public class BoardDAO {
 	
 	public int insertBoard(BoardDTO dto) {
 		
-		String sql = "INSERT INTO m_board VALUES(board_num_seq.nextval,?,0,?,sysdate,?)";
+		String sql = "INSERT INTO m_board VALUES(board_num_seq.nextval,?,0,?,sysdate,?, null)";
 		int i = 0;
 		
 		try {
@@ -211,14 +211,57 @@ public class BoardDAO {
 		return u;
 	}
 	
-	public List<BoardDTO> mainSelectBoard() {
+	public int pageingCount() {
 		
-		String sql = "SELECT * FROM m_board";
-		List<BoardDTO> list = new ArrayList<>();
+		String sql = "SELECT COUNT(*) FROM m_board";
+		int pa = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
 			pstmt = conn.prepareStatement(sql);
+			res = pstmt.executeQuery();
+			
+			if(res.next()) {
+				pa = res.getInt(1);
+			}
+			
+		} catch (ClassNotFoundException | SQLException | NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(conn != null) conn.close();
+				if(pstmt != null) pstmt.close();
+				if(res != null) res.close();
+			} catch (SQLException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		System.out.println(pa);
+		return pa;
+	}
+	
+	public List<BoardDTO> mainSelectBoard(int from, int to) {
+		
+		String sql = "select rn, board_number, board_writer, board_content, board_title, board_date, board_count,board_lmd "
+				+ "from( select "
+				+ "Rownum as rn , board_number, board_writer, board_content, board_title, board_date, board_count, board_lmd "
+				+ "from( "
+				+ "		select board_number,board_writer, board_content, board_title, board_date, board_count, board_lmd"
+				+ "		from m_board order by board_date desc"
+				+ "		)"
+				+ "	)"
+				+ "where rn >=? and rn <=?";
+		List<BoardDTO> list = new ArrayList<>();
+		System.out.println(sql);
+		System.out.println("from값 :"+from + "to 값: "+to);
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, from);
+			pstmt.setInt(2, to);
 			res = pstmt.executeQuery();
 			
 			

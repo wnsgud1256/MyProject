@@ -1,7 +1,5 @@
 package Board;
 
-import java.sql.Date;
-
 public class BoardDTO {
 
 	private String boardWriter;
@@ -10,6 +8,15 @@ public class BoardDTO {
 	private String boardDate;
 	private String boardTitle;
 	private String boardLmd;
+	
+	private int totalCount; //총게시글 갯수
+	
+	public int getTotalCount() {
+		return totalCount;
+	}
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
 	
 	public String getBoardLmd() {
 		return boardLmd;

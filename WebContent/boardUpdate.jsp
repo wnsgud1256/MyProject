@@ -1,45 +1,92 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<style>
+html,body {height: 100%;}
+</style>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="css/header.css">
+<link rel="stylesheet" type="text/css" href="css/footer.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+	integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
 <title>Insert title here</title>
+<script>
+	$(document).ready(function() {
+		let changeStyle = $("#footer-basic"); //í‘¸í„° css ë³€ê²½ë²•
+		changeStyle.css('position', 'absolute');
+	});
+</script>
 </head>
 <body>
-<form action="boardUpdateOk.do" method="POST">
-		<table border="1">
+<jsp:include page="header.jsp"/>
+<div class="container" style="margin:100px auto auto auto;">
+<div class="row justify-content-md-center">
+<form action="boardUpdateOk.do" method="POST" onsubmit="return updateCheck();">
+		<table class="table table-sm">
 		<tr>
-			<th>ÀÛ¼ºÀÚ</th>
+			<th>ì‘ì„±ì</th>
 			<td>${Info.boardWriter}</td>
 		</tr>
 		<tr>
-			<th>Á¦¸ñ</th>
-			<td><input type="text" name="title" value="${Info.boardTitle}"></td>
+			<th>ì œëª©</th>
+			<td><input type="text" name="title" size="50" maxlength="100" value="${Info.boardTitle}" autocomplete="off" style="border:none; background-color: #D8D8D8" id="title"></td>
 		</tr>
 		<tr>
-			<th>ÀÛ¼ºÀÏÀÚ</th>
+			<th>ì‘ì„±ì¼ì</th>
 			<td>${Info.boardDate}</td>
 		</tr>
 		<tr>
-			<th>³»¿ë</th>
-			<td><textarea name="content">${Info.boardContent}</textarea></td>
+			<th>ë‚´ìš©</th>
+			<td><textarea id="content" name="content" cols="100" rows="10"autocomplete="off">${Info.boardContent}</textarea></td>
 		</tr>
 	</table>
 	<input type="hidden" name="number" value="${Info.boardNumber}">
-	<input type="submit" value="Á¤º¸ ¼öÁ¤" onclick="updateCheck();">
-	<input type="reset" value="Ãë¼Ò" onclick="history.go(-1)"> 
+	<input type="submit" class="btn btn-success" value="ê²Œì‹œê¸€ ìˆ˜ì •">
+	<input type="reset" class="btn btn-danger" value="ì·¨ì†Œ" onclick="history.go(-1)"> 
 </form>
-
+</div>
+</div>
 <script>
 	function updateCheck() {
-		let upCheck = confirm("ÇØ´ç ±ÛÀ» Á¤¸» ¼öÁ¤ ÇÏ½Ã°Ú½À´Ï±î?");
+		
+		let title = $("#title").val();
+		let content = $("#content").val();
+		
+		if(title==""){
+			alert("ì œëª©ì„ ì¨ì£¼ì„¸ìš”");
+			return false;
+		} else if(content==""){
+			alert("ë‚´ìš©ì„ ì¨ì£¼ì„¸ìš”");
+			return false;
+		}
+		
+		let upCheck = confirm("í•´ë‹¹ ê¸€ì„ ì •ë§ ìˆ˜ì • í•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
 			if(upCheck){
-				alert("Á¤º¸°¡ ¼öÁ¤ µÇ¾ú½À´Ï´Ù.");
+				alert("ê²Œì‹œê¸€ì´ ìˆ˜ì • ë˜ì—ˆìŠµë‹ˆë‹¤.");
+			} else {
+				alert("ê²Œì‹œê¸€ ìˆ˜ì •ì´ ì·¨ì†Œ ë˜ì—ˆìŠµë‹ˆë‹¤..");
+				return false;
 			}
 	}
 </script>
-
+<jsp:include page="bootstrap4.jsp" />
+	<jsp:include page="footer.jsp"/>
+	
 </body>
 </html>
