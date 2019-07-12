@@ -15,16 +15,14 @@ public class ReCommantInsertCommand implements Command {
 		CommantDTO dto = new CommantDTO();
 		
 		
-		
-		dto.setCommantWriter(request.getParameter("Writer"));
-		dto.setCommantContent(request.getParameter("Content"));
-		dto.setCommantBoard(Integer.parseInt(request.getParameter("Number")));
-		dto.setCommantReNum(Integer.parseInt(request.getParameter("CommantNum")));
-		if(request.getParameter("RecommantId") != null) {
+		dto.setCommantWriter(request.getParameter("ReWriter"));
+		dto.setCommantContent(request.getParameter("ReContent"));
+		dto.setCommantBoard(Integer.parseInt(request.getParameter("ReBoNum")));
+		dto.setCommantReNum(Integer.parseInt(request.getParameter("ReCommantNum")));		
 		dto.setCommantReid(request.getParameter("RecommantId"));
-		}
-		dao.RedepthPlus(dao.getRedepth(dto));
-		dao.insertCommant(dto);
+		dao.getRedepth(dto);
+		
+		//깊이 증가시키는 추가 작업 해야하고 뷰단 조정 하면 해당 프로젝트는 끝남.
 		
 	}
 

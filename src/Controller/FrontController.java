@@ -25,6 +25,9 @@ import Command.MemberMypageCommand;
 import Command.MemberSignIdCheckCommand;
 import Command.MemberSignUpCommand;
 import Command.MemberUpdateCommand;
+import Command.ReCommantInsertCommand;
+import Command.deleteCommantCommand;
+import Command.updateCommantCommand;
 import Member.MemberDTO;
 
 /**
@@ -145,9 +148,25 @@ public class FrontController extends HttpServlet {
 			command = new InsertCommantCommand();
 			command.run(request, response);
 			return;
-			
+		}else if(cop.equals("/deletecommant.do")) {
+			command = new deleteCommantCommand();
+			command.run(request, response);
+			int delState = (int)request.getAttribute("delState");
+			out.println(delState);
+			out.close();
+			return;
+		}else if(cop.equals("/updatecommant.do")) {
+			command = new updateCommantCommand();
+			command.run(request, response);
+			int upState = (int)request.getAttribute("upState");
+			out.println(upState);
+			out.close();
+			return;
+		}else if(cop.equals("/recommant.do")) {
+			command = new ReCommantInsertCommand();
+			command.run(request, response);
+			return;
 		}
-		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

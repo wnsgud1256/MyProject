@@ -11,13 +11,14 @@ html,body {height: 100%;}
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<link rel="stylesheet" type="text/css" href="css/header.css">
-<link rel="stylesheet" type="text/css" href="css/footer.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
+
+<link rel="stylesheet" type="text/css" href="css/header.css">
+<link rel="stylesheet" type="text/css" href="css/footer.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
 	integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
@@ -30,7 +31,10 @@ html,body {height: 100%;}
 <script>
 //TypeError : $ .ajax is not a function 에러가 계속 떳던 이유. jquery3.4.1.slim.min.js 제이쿼리 cdn중에서 ajax 모듈을 생략한 slime 경량 판이 저 코드다 slim 코드 때문에
 //작동이 되지 않았던것. slim을 제거 후 경량판이 아닌 cdn을 쓰니 작동을 햇음.
+//자바스크립트에서 클래스는 같은 이름이 있으면 여러개가 적용이 되지만 id는 한개만 적용이 된다.
 	$(document).ready(function() {
+		$(".CommantUp").hide();
+		$(".reCommantIn").hide();
 		$("#CommantBtn").click(function(){
 			let content = $("#commantText").val();
 			let session = $("#sessionVal").val();
@@ -57,43 +61,73 @@ html,body {height: 100%;}
 				
 			});
 		});
-		
-			function commantDel(){
-				let CoNum = $("commantNum").val();
+		//off는 이벤트 중복을 제거해줌
+		$(".commantDel").off().on('click',function(){
+				let CoNum = $(this).parent().parent().children(".CommantNum").text();
+				console.log(CoNum);
 				$.ajax({
 					type:"POST",
 					url:"deletecommant.do",
 					data:{ "CommantNum" : CoNum},
 					success:function(res){
+						alert("삭제되었습니다.")
 						location.reload();
 					},
 					error:function(){
 						alert("에러떳습니다.");
 					}
 				});
-			};
-			
-			function commantUpdate(){
+		});
+		
+			 $(".upOk").click(function(){
+				let number = $(this).parent().parent().children(".CommantNum").text();
+				let reContent = $(this).parent().parent().children(".CommantUp").children("textarea").val();
+				reContent = $.trim(reContent);
+				if(!reContent){
+					alert("내용을 입력해주세요");
+					return false;
+				} if(reContent =="") {
+					alert("내용을 입력해주세요");
+					return false;
+				}
+				console.log(number);
+				console.log(reContent);
 				$.ajax({
 					type:"POST",
 					url:"updatecommant.do",
-					data:{"Content" : content
-						  "Number"},
+					data:{"reContent" : reContent,
+						  "Number" : number},
 					success:function(){
+						alert("수정되었습니다.")
 						location.reload();
 					},
 					error:function(){
 						alert("에러뜸.");
 					}
-				});
-			};
-			function reCommant(){
-				$.ajax({
+				}); 
+			}); 
+			//find는 전체 자식 노드를 찾고 children은 바로 아래 자식노드만 찾는다
+			$(".reCommantBtn").click(function(){
+				let recontent = $(this).parent().children(".reCommantText").val();
+				let rewriter = $("#sessionVal").val();
+				let renumber = $("#boardNum").val();
+				let recommantNum = $(this).parent().parent().prev().find(".CommantNum").text();
+				let recommantid = $(this).parent().parent().prev().find(".CommantWriter").text();
+				
+				console.log(recontent);
+				console.log(rewriter);
+				console.log(renumber);
+				console.log(recommantNum);
+				console.log(recommantid);
+				
+				 $.ajax({
 					type:"POST",
 					url:"recommant.do",
-					data:{"Content" : content,
-						  "Writer" : writer,
-						  "Number" :number,
+					data:{"ReContent" :  recontent,
+						  "ReWriter" :  rewriter,
+						  "ReBoNum" : renumber,
+						  "ReCommantNum" : recommantNum,
+						  "ReCommantId" : recommantid
 						  },
 					success:function(){
 						location.reload();
@@ -101,8 +135,9 @@ html,body {height: 100%;}
 					error:function(){
 						alert("에러뜸");
 					}
-				});
-			};
+				});  
+			});
+			
 			function boardAction(value) {
 				if(value == 0) 
 					location.href="boardUpdate.do?number=${oneBoard.boardNumber}";
@@ -120,7 +155,10 @@ html,body {height: 100%;}
 			
 		let changeStyle = $("#footer-basic"); //푸터 css 변경법
 		changeStyle.css('position', 'relative');
+		
 	});
+	
+	
 </script>
 </head>
 <body>
@@ -161,6 +199,7 @@ html,body {height: 100%;}
 	<input type="button" class="btn btn-danger" value="글 삭제" onclick="boardAction(1)">
 	</c:if>
 </form>
+
 </div>
 <!-- 댓글 쓰는곳 -->
 <div class="row justify-content-md-center">
@@ -169,33 +208,70 @@ html,body {height: 100%;}
 	<input type="button" class="btn btn-dark" value="댓글 쓰기" id="CommantBtn">
 	</c:if>
 </div>
+
 <!-- 댓글을 보여주는 부분. -->
 <div class="row justify-content-md-center" id="commantBox">
-	<table class="table table-sm">
+	<ul style="width:100%;">
 		<c:forEach items="${onecommantlist}" var="commant">
-			<tr style="margin-left:${20*commant.commantRedepth}">
-				<c:choose>
-				<c:when test="${commant.commantReid == null}">
-				<td>${commant.commantWriter}</td>
-				</c:when>
-				<c:otherwise>
-				<td class="">${commant.commantReid}${commant.commantWriter}</td>
-				</c:otherwise>
-				</c:choose>
-				<td class="CommantCon">${commant.commantContent}</td>
-				<td>${commant.commantDate}</td>
-				<td>
-				<button onclick="commantDel();"></button>/<a onclick="commantUpdate">수정</a>/<a onclick="reCommant">댓글</a>
-				</td>
-			</tr>
+		
+			<li class="reCommantView" style="padding-left:${20*commant.commantRedepth}">
+			<div>
+				<span class="CommantNum">${commant.commantNumber}</span> 
+				<span class="CommantWriter">${commant.commantWriter}</span>
+				
+				
+				<span>${commant.commantDate}</span>
+				<c:if test="${sessionid != null && sessionid == commant.commantWriter}">	
+				<span class="CommantControl">
+						<button class="commantDel">댓글삭제</button> 
+						<button class="commantUpdate">댓글수정</button> 
+						<button class="reCommant">대댓글달기</button>
+				</span>
+				</c:if>
+				<p class="CommantUp"><textarea cols="100" rows="5" style="resize:none;"></textarea><button class="upOk">수정하기</button><button class="CommantCancel">취소</button></p>
+				<p class="CommantCon">${commant.commantContent}</p>
+			</div>
+	 		</li>
+			<li class="reCommantIn" style="padding-left:${20*commant.commantRedepth}">
+				
+				<div class="row justify-content-md-center">
+						<textarea rows="5" cols="130" class="reCommantText"></textarea>
+					<input type="button" class="btn btn-dark reCommantBtn" value="댓글 쓰기" >
+				</div>
+				
+			</li>
+		
 		</c:forEach>
-	</table>
+	</ul>	
+
 </div>
 </div>
 <input type="hidden" value="${sessionid}" id="sessionVal">
 <input type="hidden" value="${param.number}" id="boardNum">
-<input type="hidden" value="${commant.commantNumber}" id="commantNum">
+	<script>
+	//댓글수정 폼
+	$(".commantUpdate").click(function(){
+	 $(this).parent().parent().children(".CommantUp").show();
+	 $(this).parent().parent().children(".CommantControl").hide();
+		/* $(this).$(".CommantCon").hide();
+		$(this).$(".CommantUp").show(); */
+	});
+	//댓글수정 - 취소 
+	$(".CommantCancel").click(function(){
+		$(this).parent().parent().children(".CommantUp").hide();
+		$(this).parent().parent().children(".CommantControl").show();
+	});
+	$(".reCommant").click(function(){
+		 let gg = $(this).parent().parent().parent().next().toggle();
+		 console.log(gg);
+		 if($(this).text() == "대댓글달기"){
+			 $(this).text("대댓글달기 취소")
+		 }else{
+		 $(this).text("대댓글달기");
+		 }
+	});
 	
+	</script>
 	<jsp:include page="bootstrap4.jsp" />
 	<jsp:include page="footer.jsp"/>
 	

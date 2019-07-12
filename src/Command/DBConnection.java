@@ -14,7 +14,7 @@ public class DBConnection {
     ClassNotFoundException{
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource) envCtx.lookup("jdbc/Oracle11g");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/orcl");
             Connection conn = ds.getConnection();
             return conn;
 	}

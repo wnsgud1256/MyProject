@@ -22,7 +22,7 @@ public class CommantDAO {
 		String sql ="SELECT * "
 				+ "FROM commant "
 				+ "WHERE commant_board = ? "
-				+ "ORDER BY commant_date DESC";
+				+ "ORDER BY commant_number DESC";
 		
 		List<CommantDTO> list = new ArrayList<>();
 		
@@ -76,10 +76,9 @@ public class CommantDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getCommantWriter());
 			pstmt.setString(2, dto.getCommantContent());
-			pstmt.setInt(3, dto.getCommantRedepth());
-			pstmt.setInt(4, dto.getCommantBoard());
-			pstmt.setString(5, dto.getCommantReid());
-			pstmt.setInt(6, dto.getCommantReNum());
+			pstmt.setInt(3, dto.getCommantBoard());
+			pstmt.setString(4, dto.getCommantReid());
+			pstmt.setInt(5, dto.getCommantReNum());
 			System.out.println(sql);
 			i = pstmt.executeUpdate();
 					
@@ -159,16 +158,17 @@ public class CommantDAO {
 	//대댓글 기능
 	
 	public CommantDTO getRedepth(CommantDTO dto) {
-		String sql = "SELECT commant_redepth FROM commant WHERE commant_number = ?"; 
+		String sql = "SELECT commant_redepth FROM commant WHERE commant_re_num = ?"; 
 		
 		try {
 			conn = DBConnection.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getCommantNumber());
+			pstmt.setInt(1, dto.getCommantReNum());
 			res = pstmt.executeQuery();
-			
+			System.out.println("깊이 : "+ dto.getCommantRedepth());
 				if(res.next()) {
 					dto.setCommantRedepth(res.getInt("COMMANT_REDEPTH"));
+					System.out.println("결과값:"+dto.getCommantRedepth());
 				}
 			
 		} catch (ClassNotFoundException | SQLException | NamingException e) {
@@ -187,18 +187,24 @@ public class CommantDAO {
 		return dto;
 	}
 	
-	public int RedepthPlus(CommantDTO dto) {
+	public int ReCommantInsert(CommantDTO dto) {
 		
-		String sql = "UPDATE commant SET commant_redepth = ? + 1 ";
+		String sql = "INSERT INTO commant (commant_number, commant_writer, commant_content, commant_date, commant_redepth, commant_board, commant_re_id, commant_re_num) VALUES "
+				+ "							(commant_num_seq.nextval,? ,? ,sysdate,? + 1,?,?,?)";
 		
-		int u = 0;
+		int re = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getCommantRedepth());
-			u = pstmt.executeUpdate();
-			
+			pstmt.setString(1, dto.getCommantWriter());
+			pstmt.setString(2, dto.getCommantContent());
+			pstmt.setInt(3, dto.getCommantRedepth());
+			pstmt.setInt(4, dto.getCommantBoard());
+			pstmt.setString(5, dto.getCommantReid());
+			pstmt.setInt(6, dto.getCommantReNum());
+			re = pstmt.executeUpdate();
+			System.out.println("깊이 : "+dto.getCommantRedepth());
 		} catch (ClassNotFoundException | SQLException | NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -212,7 +218,7 @@ public class CommantDAO {
 			}
 		}
 		
-		return u;
+		return re;
 	}
 	
 }
