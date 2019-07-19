@@ -5,6 +5,7 @@ jsp와 오라클로 만들어진 개인 프로젝트 게시판
 - oracle Database Express Edition 11g Release 2
 - Eclipse Oxygen 3a Release (4.7.3a)
 ## 개발언어
+- oracle
 - Java
 - JSP
 - Servlet
